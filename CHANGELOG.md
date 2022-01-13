@@ -1,7 +1,8 @@
 x.y.z Release notes (yyyy-MM-dd)
 =============================================================
 ### Enhancements
-* None.
+* Add ability to permanently delete a User from a MongoDB Realm app. This can
+  be invoked with `User.delete()`/`[RLMUser deleteWithCompletion:]`.
 
 ### Fixed
 * <How to hit and notice issue? what was the impact?> ([#????](https://github.com/realm/realm-swift/issues/????), since v?.?.?)

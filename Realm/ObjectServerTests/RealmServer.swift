@@ -527,9 +527,13 @@ public class RealmServer: NSObject {
         let binDir = Self.buildDir.appendingPathComponent("bin").path
         let libDir = Self.buildDir.appendingPathComponent("lib").path
         let binPath = "$PATH:\(binDir)"
+        let awsAccessKeyId = ProcessInfo.processInfo.environment["AWS_ACCESS_KEY_ID"]!
+        let awsSecretAccessKey = ProcessInfo.processInfo.environment["AWS_SECRET_ACCESS_KEY"]!
         let env = [
             "PATH": binPath,
-            "DYLD_LIBRARY_PATH": libDir
+            "DYLD_LIBRARY_PATH": libDir,
+            "AWS_ACCESS_KEY_ID": awsAccessKeyId,
+            "AWS_SECRET_ACCESS_KEY": awsSecretAccessKey
         ]
 
         let stitchRoot = RealmServer.buildDir.path + "/go/src/github.com/10gen/stitch"
@@ -861,6 +865,16 @@ public class RealmServer: NSObject {
             throw URLError(.badServerResponse)
         }
         return appId
+    }
+
+    public func retrieveUser(_ appId: String, userId: String, _ completion: @escaping (Result<Any?, Error>) -> Void) {
+        guard let appServerId = try? RealmServer.shared.retrieveAppServerId(appId),
+              let session = session else {
+            completion(.failure(URLError.unknown as! Error))
+            return
+        }
+        let app = session.apps[appServerId]
+        app.users[userId].get(completion)
     }
 
     // Remove User from MongoDB Realm using the Admin API

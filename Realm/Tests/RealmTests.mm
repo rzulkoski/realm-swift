@@ -1839,7 +1839,7 @@
     XCTAssertFalse([realm writeCopyToURL:RLMTestRealmURL() encryptionKey:nil error:&writeError]);
     RLMValidateRealmError(writeError, RLMErrorFilePermissionDenied, expectedError, expectedUnderlying);
 
-    // Test writeCopyWithConfiguration
+    // Test writeCopyForConfiguration
     RLMRealmConfiguration *configuration = [RLMRealmConfiguration defaultConfiguration];
     configuration.fileURL = RLMTestRealmURL();
     writeError = nil;
@@ -1898,7 +1898,7 @@
 
 #pragma mark - Write Copy with Configuration
 
-- (void)testWriteCopyWithConfiguration
+- (void)testWriteCopyForConfiguration
 {
     RLMRealmConfiguration *configuration = [RLMRealmConfiguration defaultConfiguration];
     configuration.fileURL = RLMTestRealmURL();
